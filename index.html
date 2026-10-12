@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Buon 18° Compleanno Giulia!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e85d75;
+      --primary-dark: #c0392b;
+      --accent: #ff85a1;
+      --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --text-color: #4a154b;
+      --disabled-color: #b0bec5;
+      --success-color: #2ecc71;
+      --error-color: #e74c3c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Elementi Sfondo Flottanti */
+    .bg-decorations {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.25;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    .heart-shape {
+      width: 20px;
+      height: 20px;
+      background-color: var(--primary);
+      transform: rotate(45deg);
+    }
+    .heart-shape::before, .heart-shape::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart-shape::before { top: -10px; left: 0; }
+    .heart-shape::after { left: -10px; top: 0; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(45deg); }
+      50% { transform: translateY(-25px) rotate(45deg); }
+    }
+
+    /* App Container Mobile-First */
+    #app {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 28px 20px;
+      box-shadow: 0 15px 35px rgba(232, 93, 117, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+      position: relative;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.6rem; }
+
+    p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: #5a2a51;
+    }
+
+    /* Pulsanti */
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      box-shadow: 0 6px 18px rgba(232, 93, 117, 0.35);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      display: inline-block;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Quiz Option Buttons */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      background: white;
+      color: var(--text-color);
+      border: 2px solid #f8bbd0;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option-btn.shake-error {
+      animation: shake 0.4s ease-in-out;
+      background-color: var(--error-color) !important;
+      color: white !important;
+      border-color: var(--error-color) !important;
+    }
+
+    .option-btn.disabled-btn {
+      opacity: 0.35;
+      pointer-events: none;
+      background-color: #e0e0e0;
+      border-color: #ccc;
+    }
+
+    .option-btn.correct-btn {
+      background-color: var(--success-color) !important;
+      color: white !important;
+      border-color: var(--success-color) !important;
+      animation: pulse 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    /* Bottom Navigation Controls */
+    .nav-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(248, 187, 208, 0.5);
+    }
+
+    .nav-btn {
+      background: white;
+      border: 1px solid var(--accent);
+      color: var(--primary);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      border-color: #ccc;
+      color: #999;
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Pop-up speciale Domanda 9 */
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .popup-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-out;
+      border-top: 4px solid var(--primary);
+    }
+
+    .popup-overlay.active .popup-content {
+      transform: translateY(0);
+    }
+
+    /* Tasto Scappatoio (Scherzetto finale) */
+    #runaway-container {
+      position: relative;
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #runaway-btn {
+      position: absolute;
+      transition: all 0.25s ease-out;
+      width: 85%;
+    }
+
+    /* Rivelazione finale */
+    .gift-img {
+      width: 100%;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      border: 3px solid white;
+    }
+
+    .gift-title {
+      font-size: 1.3rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-decorations">
+    <div class="heart-shape shape" style="top: 10%; left: 15%;"></div>
+    <div class="heart-shape shape" style="top: 25%; right: 12%; animation-delay: 2s;"></div>
+    <div class="heart-shape shape" style="top: 65%; left: 10%; animation-delay: 4s;"></div>
+    <div class="heart-shape shape" style="top: 80%; right: 20%; animation-delay: 1s;"></div>
+  </div>
+
+  <div id="app">
+    <!-- Le varie schermate verranno renderizzate dinamicamente via JS -->
+  </div>
+
+  <!-- Pop-up Domanda 9 -->
+  <div id="popup-q9" class="popup-overlay">
+    <div class="popup-content">
+      <h2>Svelato il segreto!</h2>
+      <p>Le uniche ad avere SEMPRE ragione sono Angela e Caterina!</p>
+      <button class="btn" onclick="closePopupQ9()">Continua il quiz</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        id: 1,
+        question: "Su quale giostra ci siamo conosciuti?",
+        options: ["Booster", "Bruco Mela", "iSpeed", "Extreme"],
+        correct: 3 // D
+      },
+      {
+        id: 2,
+        question: "Dove è stata la nostra prima uscita insieme a Bologna?",
+        options: ["Gran Reno", "Meridiana", "The Space", "Centro"],
+        correct: 1 // B
+      },
+      {
+        id: 3,
+        question: "A Natale 2025 Manuel ti ha regalato la Borsa di Silvia Milano",
+        options: ["Vero", "Falso"],
+        correct: 0 // A
+      },
+      {
+        id: 4,
+        question: "Qual è stato il primo messaggio che mi hai scritto su Instagram la sera in cui ci siamo conosciuti?",
+        options: ["una foto", "\"siamo arrivate sane e salve\"", "\"ciaoo\"", "un video"],
+        correct: 0 // A
+      },
+      {
+        id: 5,
+        question: "Abbiamo litigato per la prima volta 2 settimane dopo esserci conosciuti",
+        options: ["Vero", "Falso"],
+        correct: 1 // B (Falso)
+      },
+      {
+        id: 6,
+        question: "Qual è stato il nostro primo viaggio insieme (non da soli)?",
+        options: ["Roma", "Riva del Garda", "Palermo", "Venezia"],
+        correct: 2 // C
+      },
+      {
+        id: 7,
+        question: "Chi si arrabbia spesso senza alcun apparente motivo?",
+        options: ["Giulia", "Manuel"],
+        correct: 0 // A
+      },
+      {
+        id: 8,
+        question: "Qual è il piatto che chiedi sempre a Manuel di prepararti?",
+        options: ["Carbonara", "Pasta con sugo di pesce", "Hamburger", "Pasta salsiccia e panna"],
+        correct: 3 // D
+      },
+      {
+        id: 9,
+        question: "Chi ha SEMPRE ragione?",
+        options: ["Manuel", "Giulia"],
+        special: true // Nessuna corretta -> Pop-up Angela e Caterina
+      },
+      {
+        id: 10,
+        question: "Da quando ci siamo conosciuti, dopo quanto tempo ci siamo messi insieme (includi entrambe le date)?",
+        options: ["58 giorni", "69 giorni", "65 giorni", "72 giorni"],
+        correct: 1 // B
+      }
+    ];
+
+    let currentStep = 'home'; // home, wishes, quiz, congrats, gift
+    let currentQuestionIndex = 0;
+    let answeredQuestions = {}; // Memorizza lo stato delle risposte date per ogni domanda
+    let runawayClicks = 0;
+
+    const app = document.getElementById('app');
+
+    function render() {
+      if (currentStep === 'home') {
+        app.innerHTML = `
+          <div class="card">
+            <h1>Buon 18° Compleanno Giulia!</h1>
+            <p>Benvenuta nel tuo gioco speciale per il tuo diciottesimo compleanno!</p>
+            <button class="btn" onclick="goToStep('wishes')">Tocca qui per iniziare il quiz</button>
+          </div>
+        `;
+      } 
+      else if (currentStep === 'wishes') {
+        app.innerHTML = `
+          <div class="card">
+            <h2>I Miei Auguri Per Te</h2>
+            <p>Tanti auguri di buon diciottesimo compleanno Giulia!</p>
+            <p>Finalmente sei arrivata a questo traguardo importante. Ho preparato per te un piccolo gioco per ripercorrere insieme alcuni dei momenti più belli e divertenti della nostra storia.</p>
+            <p>Mettiti alla prova con questo quiz... Alla fine c'è una sorpresa speciale per te!</p>
+            <button class="btn" onclick="goToStep('quiz')">Inizia il Quiz</button>
+          </div>
+        `;
+      } 
+      else if (currentStep === 'quiz') {
+        const q = questions[currentQuestionIndex];
+        const state = answeredQuestions[currentQuestionIndex] || { disabled: [], solved: false };
+
+        let optionsHTML = q.options.map((opt, idx) => {
+          let classes = "option-btn";
+          if (state.disabled.includes(idx)) classes += " disabled-btn";
+          if (state.solved && idx === q.correct) classes += " correct-btn";
+
+          return `<button class="${classes}" id="opt-${idx}" onclick="handleOptionClick(${idx})">${opt}</button>`;
+        }).join('');
+
+        app.innerHTML = `
+          <div class="card">
+            <h2>Domanda ${q.id} di 10</h2>
+            <p style="font-weight: 600; color: var(--text-color); margin-bottom: 20px;">${q.question}</p>
+            
+            <div class="options-grid">
+              ${optionsHTML}
+            </div>
+
+            <div class="nav-controls">
+              <button class="nav-btn" onclick="prevQuestion()" ${currentQuestionIndex === 0 ? 'disabled' : ''}>&larr;</button>
+              <span class="progress-text">${currentQuestionIndex + 1} / 10</span>
+              <button class="nav-btn" onclick="nextQuestion()" ${(!state.solved && !q.special) ? 'disabled' : ''}>&rarr;</button>
+            </div>
+          </div>
+        `;
+      } 
+      else if (currentStep === 'congrats') {
+        app.innerHTML = `
+          <div class="card">
+            <h2>Complimenti Giulia!</h2>
+            <p>Hai completato ufficialmente il quiz della nostra storia!</p>
+            <p>Ora sei pronta per scoprire il vero regalo per il tuo diciottesimo compleanno?</p>
+            
+            <div id="runaway-container">
+              <button id="runaway-btn" class="btn" onclick="handleRunawayClick()">Clicca qui per scoprire il regalo</button>
+            </div>
+          </div>
+        `;
+      } 
+      else if (currentStep === 'gift') {
+        app.innerHTML = `
+          <div class="card">
+            <h2>Il Tuo Regalo di 18 Anni</h2>
+            <img src="cavallo_islandese.jpg" alt="Esperienza a Cavallo" class="gift-img">
+            <div class="gift-title">Un'esperienza a cavallo per noi due!</div>
+            <p>Faremo insieme un'attività di due ore a cavallo immersi nella natura nei pressi di Vergato!</p>
+            <p>So quanto hai amato l'equitazione da piccola e non vedo l'ora di vivere queste due ore di relax e avventura insieme a te.</p>
+            <p style="font-weight: 700; color: var(--primary);">Buon Compleanno Amore Mio!</p>
+          </div>
+        `;
+      }
+    }
+
+    function goToStep(step) {
+      currentStep = step;
+      render();
+    }
+
+    function handleOptionClick(index) {
+      const q = questions[currentQuestionIndex];
+      if (!answeredQuestions[currentQuestionIndex]) {
+        answeredQuestions[currentQuestionIndex] = { disabled: [], solved: false };
+      }
+      const state = answeredQuestions[currentQuestionIndex];
+
+      if (state.solved) return;
+
+      if (q.special) {
+        // Gestione speciale Domanda 9
+        state.disabled.push(index);
+        const btn = document.getElementById(`opt-${index}`);
+        btn.classList.add('shake-error');
+        
+        setTimeout(() => {
+          btn.classList.remove('shake-error');
+          btn.classList.add('disabled-btn');
+          
+          if (state.disabled.length === 2) {
+            // Entrambi disabilitati -> mostra pop-up
+            state.solved = true;
+            document.getElementById('popup-q9').classList.add('active');
+          }
+        }, 400);
+        return;
+      }
+
+      if (index === q.correct) {
+        state.solved = true;
+        const btn = document.getElementById(`opt-${index}`);
+        btn.classList.add('correct-btn');
+        render();
+      } else {
+        if (!state.disabled.includes(index)) {
+          state.disabled.push(index);
+        }
+        const btn = document.getElementById(`opt-${index}`);
+        btn.classList.add('shake-error');
+        
+        setTimeout(() => {
+          btn.classList.remove('shake-error');
+          btn.classList.add('disabled-btn');
+        }, 400);
+      }
+    }
+
+    function closePopupQ9() {
+      document.getElementById('popup-q9').classList.remove('active');
+      render();
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        render();
+      } else {
+        goToStep('congrats');
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        render();
+      }
+    }
+
+    function handleRunawayClick() {
+      const btn = document.getElementById('runaway-btn');
+      runawayClicks++;
+
+      if (runawayClicks <= 10) {
+        // Spostamento e rotazione casuale
+        const randomX = (Math.random() - 0.5) * 180;
+        const randomY = (Math.random() - 0.5) * 180;
+        const randomRot = (Math.random() - 0.5) * 360;
+
+        btn.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRot}deg)`;
+      } else {
+        // Al proseguimento dell'11° click accede al regalo
+        btn.style.transform = `none`;
+        goToStep('gift');
+      }
+    }
+
+    // Inizializzazione
+    render();
+  </script>
+</body>
+</html>
